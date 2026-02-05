@@ -34,6 +34,10 @@
   list-style-type: disc;
 }
 
+.page ul ul {
+  list-style: square;
+}
+
 .page ol {
   list-style-type: decimal;
 }
@@ -65,4 +69,55 @@
 
     border-radius: 8px;
   }
+}
+
+.algorithm-steps {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1.8rem 2rem;
+  margin: 3rem 0;
+}
+
+.algorithm-title {
+  margin-bottom: 1.4rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.algorithm-step + .algorithm-step {
+  margin-top: 1.8rem;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.step-content {
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* Lists inside algorithm */
+.algorithm-steps ul,
+.algorithm-steps ol {
+  padding-left: 1.4rem;
+  margin: 0.6rem 0 1rem;
+}
+
+.algorithm-steps li {
+  margin: 0.45rem 0;
+}
+
+.algorithm-steps li::marker {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Nested lists feel tighter */
+.algorithm-steps li ul li,
+.algorithm-steps li ol li {
+  margin: 0.35rem 0;
 }

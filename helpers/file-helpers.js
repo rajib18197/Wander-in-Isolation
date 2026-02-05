@@ -5,10 +5,11 @@ import React from "react";
 
 export async function getBlogPostList() {
   const fileNames = await readDirectory("/articles");
+  const files = fileNames.filter((file) => file.includes("."));
 
   const blogPosts = [];
 
-  for (let fileName of fileNames) {
+  for (let fileName of files) {
     const rawContent = await readFile(`/articles/${fileName}`);
 
     const { data: frontmatter } = matter(rawContent);

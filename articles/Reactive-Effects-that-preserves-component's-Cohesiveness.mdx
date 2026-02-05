@@ -1,0 +1,135 @@
+---
+title: Reactive Effects that preserves component's Cohesiveness
+abstract: A look on making a react component lean towards in the direction of cohesiveness and reactivity.
+publishedOn: "2025-11-05T12:00:00-0400"
+---
+
+It’s not fairly new that when we have bunch of complex data which lives in a database then mainly the essential job of a web application is to act as an interface (a window) to those data that let users read and manipulate. To perform these user centric action we usually need to implement filter, sort, search, pagination etc.
+
+When working on the implementation, we often need to handle quirky behaviors, for instance: to keep them sync with each other. If a user is on page 3 and then start typing on search input or change the filter, the pagination should adapt, right?
+
+I can hear you saying, this edge case isn’t a big deal after all the solution is remarkably straightforward. But that’s not the point here. I want to share some perspective change that I’ve had working with it.
+
+That said, in terms of solution, we can reset the page state on Search Component. Like when setting the new search input value we’ll also set the page state to 1. Like this:
+
+```tsx
+// Using a package for managing type safe url query
+import {
+  useQueryState,
+  useURLQueryStates,
+  parseAsString,
+  parseAsInt,
+} from "nuqs";
+
+import { SearchInput } from "@/components/search-input";
+
+export default function RegistrationRequestsSearchInput({ placeholder }) {
+  // use "nuqs" hook to manage the search input state in the url
+  const [search, setSearch] = useQueryState(
+    "search",
+    parseAsString.withDefault(""),
+    { shallow: false, clearOnDefault: true }
+  );
+
+  // only needed to call this hook to reset the page state
+  const [pagination, setPagination] = useURLQueryStates(
+    {
+      page: parseAsInt.withDefault(1),
+      size: parseAsInt.withDefault(10),
+    },
+    {
+      shallow: false,
+    }
+  );
+
+  function handleSearch(value) {
+    setSearch(value);
+    // reset the page state to 1
+    setPagination({ ...pagination, page: 1 });
+  }
+
+  return (
+    <SearchInput
+      value={search}
+      onChange={handleSearch}
+      placeholder={placeholder}
+    />
+  );
+}
+```
+
+Sure it’s a viable solution and for a long time I used to solve this way. But as my experience with component driven approach becoming more mature I start to realize why it’s better to avoid this pattern.
+
+Let’s take a moment to analyze this a little bit and see if we can extract a lesson or two from here.
+
+Setting a new page state leans heavily into Pagination component - that’s why it exist in the first place. Search Component is interfering with it by setting a new value technically works alright but it becomes hard to keep track of which code is doing page state manipulations with time and code moves slightly towards the direction of spaghetti.
+
+Think about the case when we have to do the same inside Filter Component if resetting page state also necessary whenever filter state changes. Wouldn’t it be nice to co-locate setting the page state stuff entirely on the Pagination Component?
+
+You might be thinking it’s a global state as we set it in a URL but that “global” here is in the sense of, we need it in a multiple different corners in our app but we don’t necessarily need to set it from those different components at least in this case I think so. we can reserve the setter function for the Pagination component only.
+
+So from Pagination component, how do we know when we need to reset state. well use-effect hook could be the great use case for this.
+
+I applied this reactive solution quite often now a days when building apps in my current job.
+
+here’s the new lens in action:
+
+```tsx
+export default function RegistrationRequestsPagination() {
+  // use "nuqs" hook to manage the pagination state in the url
+  const [pagination, setPagination] = useURLQueryStates(
+    {
+      page: parseAsInt.withDefault(1),
+      size: parseAsInt.withDefault(10),
+    },
+    {
+      shallow: false,
+    }
+  );
+
+  const [search, setSearch] = useQueryState(
+    "search",
+    parseAsString.withDefault(""),
+    { shallow: false, clearOnDefault: true }
+  );
+
+  const prevSearch = useRef(search);
+
+  useEffect(() => {
+    // we can also listen for other changes i.e. filter. The idea is we can add
+    // more reactive state in here whenever we need to reset the page state.
+    if (search === prevSearch.current) return;
+    prevSearch.current = search;
+
+    setPagination({ ...pagination, page: 1 });
+  }, [search, pagination, setPagination]);
+
+  return (
+    <Pagination
+      pagination={pagination}
+      onPagination={setPagination}
+      paginatedMetadata={paginatedRegistrationsMetadata}
+    />
+  );
+}
+```
+
+<Image
+  src="/images/react-urls.png"
+  alt="Reactive Effects"
+  caption="here you can see the difference visually"
+/>
+
+So what do you think about this? Is this actually outshine the previous one? Essentially this method of Reactive Effects preserves component's Encapsulation.
+
+We are lean into the idea of cohesive approach (the degree to which elements of a module belong together) and reactive approach, something radical that react brought with it when they introduced Component for writing application.
+
+Reactive in the sense that here, we describe the reset page state with an effect. we are saying when the search input is different then backtrack the page state to 1. Describing it once and for all. we can listen the filter state change also if needed.
+
+and cohesion in the sense, Pagination component is now the ultimate contract holder for setting page state and that’s what makes sense in this case I guess.
+
+In the example above, Search Component and Pagination Component is like self independent thing, they only think about them, they act like they do not have the contract of changing other components things. This cohesiveness, this single source of truth makes the application more predictable and more organized.
+
+This is One of the best things about Component pattern, that they encourage this sort of good habits.
+
+Thank you so much for taking the time to read it. Feel free to drop your thoughts about this because I think it's a bit subjective.

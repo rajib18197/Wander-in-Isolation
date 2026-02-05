@@ -1,0 +1,141 @@
+---
+title: Making Sense of Bipartite Graph
+abstract: Developing strength in the area of graph is a great outlet to sharpen your programming craft. It also has ripple effect. You wander with queue, stack, priority queue and what not, while dealing with graph.To get a glimpse of it, in today's issue, I'd like to communicate briefly, the idea of Bipartite Graph and its implementation in a very gentle manner.
+publishedOn: "2026-01-30T12:00:00-0400"
+---
+
+{/* <PDF src="/pdfs/Bipartite-Explanation.pdf" title="Bipartite-Explanation" /> */}
+{/* 📄 [I also created this as a PDF format. If you wish you can read it](/pdfs/Bipartite-Explanation.pdf) */}
+
+**Developing strength in the area of graph is a great outlet to sharpen your programming craft**. It also has ripple effect. You wander with queue, stack, priority queue and what not, while dealing with graph.
+
+To get a glimpse of it, in today’s issue, I’d like to communicate briefly, the idea of Bipartite Graph and its implementation in a very gentle manner. Lets’ go.
+
+The Whole idea with graph is, we make **connections between things**, which forms a network along its perimeter. A connection sets a bond between two nodes. And **If it is possible for two distinct colors to be exhausted on each edge, then we wind up calling it a Bipartite**. You’ve gotta run out of two colors.
+
+<Image
+  src="/images/bipartite-graph.png"
+  alt="Bipartite Graph"
+  caption="Bipartite Graph"
+/>
+
+Since the structure of a graph can be as broad as Ocean and simultaneously it can be as high as mountains, we can either traverse broad by exploiting neighbor nodes before descendants or can go deep by striking descendants first.
+
+These two are the most common techniques to lean into when information is organized like this. First one is BFS (Breadth First Search) and Latter one is DFS (Depth First Search).
+
+Let’s lining out what steps the BFS Algorithm takes internally for Bipartite check:
+
+- entering the function with a starting node, first thing it does is enqueue the starting node into the queue data structure
+
+- gives the starting node a color (0 | 1, model as 2 distinct colors) in the colors[] array
+
+- runs a loop until the queue is empty and on each iteration:
+
+  - dequeues a node
+  - fires yet another loop to see all of its neighbors and look for 3 things for each neighbors: If the neighbor node is not yet colored, it gives a color opposed to dequeued node’s color and enqueue that afterwards
+  - else if the neighbor is already colored and its color got blended in with the dequeued node then it is not a bipartite graph, it then terminates the function straight away but if it is having the opposite color then continue.
+
+- Finally, the queue becomes empty here, which means, it didn’t fall into the identical color consequences, sure thing, we can safely say the given graph conforms the bipartite rules.
+
+### Here’s the BFS implementation in TypeScript:
+
+```ts
+enum COLORS {
+  COLORED_RED = 0,
+  COLORED_GREEN = 1,
+  NOT_COLORED = -1,
+}
+
+const checkBipartiteBFS = function (
+  startingNode: number,
+  adj: number[][],
+  colors: COLORS[]
+): boolean {
+  // define a queue and give starting node a color and enqueue it
+  const queue: number[] = [];
+  colors[startingNode] = 0;
+  queue.push(startingNode);
+
+  // run a loop until queue becomes empty
+  while (queue.length !== 0) {
+    // dequeues a node
+    const node = queue.shift() as number;
+
+    // look for its neighbour nodes and do those checking stuffs and all
+    for (let j = 0; j < adj[node].length; j++) {
+      const neighbourNode = adj[node][j];
+
+      // both the neighbour and dequeued node are having same color, not a bipartite
+      if (colors[neighbourNode] === colors[node]) {
+        return false;
+      }
+
+      //  neighbour node is not colored,so color and enqueue it in turn
+      if (colors[neighbourNode] === -1) {
+        colors[neighbourNode] = (colors[node] + 1) % 2; // 0 becomes 1 and 1 becomes 0
+        queue.push(neighbourNode);
+      }
+    }
+  }
+
+  // queue becomes empty here, it is a bipartite graph surely
+  return true;
+};
+```
+
+### A quick Primer on Recursion —
+
+since DFS is recursive by nature, thereby, we don’t push a node into the queue every time we discover an un-colored node. Instead we invoke the function again with the un-colored node. That’s it. That’s the only major difference to observe.
+
+we are repeating the same thing on each iteration if we look closely on BFS. So why not calling the function itself from within itself but with different node, otherwise the pitfall of recursion pops up, business as usual (shoutout to stack overflow).
+
+### With that in mind, let’s look at the steps of DFS Algorithm for Bipartite:
+
+- entering the function with a node and a color, it starts by giving the node that color in the colors[] array
+
+- fires a loop to see all of its neighbors and look for the followings:
+  If the neighbor node is not yet colored, it calls the DFS function again with the neighbor node and a color opposed to dequeued node’s color. If the call comes back with a “false” value then no need to iterate further, return “false” here as well. Because rules broken by one node in the graph is enough to call it not a bipartite.
+  else if the neighbor is already colored and its color got blended in with the dequeued node then it is not a bipartite graph, it then terminates the function straight away with return “false” but if it is having the opposite color then continues.
+
+- Lastly, the queue becomes empty here, this node didn’t fall into the identical color consequences. So it returns “true” here, which simply means, this node is not the one that break the bipartiteness and exit this execution to go back to where the function came from.
+
+### Here’s the DFS implementation in TypeScript:
+
+```ts
+enum COLORS {
+  COLORED_RED = 0,
+  COLORED_GREEN = 1,
+  NOT_COLORED = -1,
+}
+
+const checkBipartiteDFS = function (
+  node: number,
+  color: 0 | 1,
+  colors: COLORS[],
+  adjList: number[][]
+) {
+  // give that node a color
+  colors[node] = color;
+
+  // look for its neighbours and do the checking and call the function recursively if needed
+  for (const neighbourNode of adjList[node]) {
+    // both having the same color, return false right away
+    if (colors[neighbourNode] === colors[node]) return false;
+
+    // neighbour node is not yet been colored, so call the function again with the opposite color
+    if (
+      colors[neighbourNode] === -1 &&
+      !checkBipartiteDFS(neighbourNode, color === 0 ? 1 : 0, colors, adjList)
+    ) {
+      return false;
+    }
+  }
+
+  // the iteration has been done and this node did not break the bipertiteness, so we return true
+  return true;
+};
+```
+
+There you have it. I hope, it was helpful. Thanks so much for reading.
+
+You can [connect with me on LinkedIn](https://www.linkedin.com/in/rajuzest/). There, I share programming related things just like this one as I learn them.
