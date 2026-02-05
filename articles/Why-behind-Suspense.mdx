@@ -1,0 +1,148 @@
+---
+title: The “Why” Behind React Suspense - Quest for the Original Vision
+abstract: Discover the why something was originally thought of makes us appreciate the tool + the way we use the tool as well as promote us to a couple of levels of we know what we are doing. It’s one of those inside job feeling and today we're going to dive into one - React Suspense Component
+publishedOn: "2025-03-10T12:00:00-0400"
+---
+
+**Discover the why something was originally thought of** makes us appreciate **the tool +** **the way we use the tool** as well as promote us to a couple of levels of **we know what we are doing**. It’s one of those **inside job** feelings.
+
+I continuously invest in this quest, in this lightbulb moment when it comes to learning. Feeding mind with this gives us a right conceptual model of something. That way we can make and move things faster with accuracy. It's no brainer why **right mental models** are the ideal interface for holding essence of something.
+
+Recently I’ve been fortunate enough to one such moment. It was really an eye-opening realization for me. So this is my attempt to write some words of my understanding. Optimistic you’ll find some values through this. It’s about React Suspense Component. Let’s dive in.
+
+A very common theme we notice in applications is that they fetches and manipulate data that lives in a database. And there's a whole category of challenges of this and one of them is **Data Fetching.** How do we fetch Data or more preciously how do we fetch data with component driven framework like react. I deliberately bring component here because that's how most of us build products at least on the Frontend.
+
+```js
+const res = await fetch("https://www.yourapp.com/users");
+const data = await res.json();
+```
+
+Let’s talk about couple of cases that need to take care of this two lines of code. First noticeable case, between the await and fetch calls for getting data, there’s definitely going to be some delay. So need to handle the loading period. Other case could be what happens when calling doesn’t go well - maybe it’s a 404 or 500. Showing Loading & Showing Error are things we need to be aware of.
+
+In react, the way we can do that is with use hook. Although It’s a versatile tool but let’s only focus on one thing here, data fetching.
+
+```jsx
+function App() {
+  return (
+    <div className="app">
+      <Suspense fallback={<InvestmentSeekingLoading />}>
+        <InvestmentSeekingBox />
+      </Suspense>
+    </div>
+  );
+}
+
+const investmentSeekingPromise = getInvestmentSeeking();
+
+function InvestmentSeekingBox() {
+  const data = use(investmentSeekingPromise);
+
+  return <div>{/* Stuff using `data` */}</div>;
+}
+```
+
+So as we can see from the code, It takes a promise as a parameter. If we call this with a promise then component will stop it’s execution right off the bat and bubble up to a closest Suspense component and showed us the given loading spinners. And when the promise resolves then react will unmount the loading fallback and start executing the component again but since the promise has been resolved so we don’t have to fall into the halting process again (also the reason we're not allowed to create the promise inside components otherwise every time we'll fall into the loading consequences again and again) instead it returns us the actual data this time and as a result showing it on the UI. but If the promise rejects then react will not try to render the component again instead it bubble up even more to find out an Error-Boundary and swap the loading with this.
+
+Two steps does the job pretty cleanly:
+
+- **wrap the component with Suspense and**
+- **prompt react to stop processing the rendering until the promise has resolved by throwing promise.**
+
+use hook throws a pending promise that we give. That's how component is able to communicate that it is not ready to render yet. Internally there's some mechanism inside React to catch that promise and suspend the render unless the promise resolves to render the components as this time promise is not pending so we got the actual data to work with.
+
+After some time digesting this pattern, A question comes into my mind, why we need Suspense and Error-Boundary when dealing with loading and error. Can’t we handle these inside the component itself?
+
+I mean the thinking of component model is, it’s A package, it should own it’s markup, it should own it’s styling, it should own it’s logic and it also should own it’s data fetching. No other components on the app should be able to meddling with this component. But with Suspense and Error-Boundary it’s not happening (sure data request is happens inside components but not loading and errors). If use hook gives us loading and error variable then it would be completely owned it’s own things component and satisfied the component definition. React did not design the API this way because there’s actually a real problem with this which is known as Layout Shift.
+
+The way I was introduced to this from a [tweet by andrew clark](https://twitter.com/acdlite/status/991503599246098432).
+
+Spinners all around. The fact that component has to be highly cohesive, it has to contains and receive everything they need to render the UI is lead us to this problem of things shifted around on the initial load which not offers a good experience for the user. Each Component resolves data at different time, and so the problem arises.
+
+Here we can see, each components for themselves, doing their own thing:
+
+```jsx
+function InvestmentSeekingBox() {
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["InvestmentSeeking"],
+    queryFn: getInvestmentSeeking,
+  });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return <div>{/* Stuff using `data` */}</div>;
+}
+
+function InvestmentVerificationBox() {
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["InvestmentVerification"],
+    queryFn: getInvestmentVerification,
+  });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return <div>{/* Stuff using `data` */}</div>;
+}
+
+function Dashboard() {
+  return (
+    <>
+      <InvestmentSeekingBox />
+      <InvestmentVerificationBox />
+    </>
+  );
+}
+```
+
+Imagine 5 or 6 components on this Dashboard then components pushing other components will be visible clearly each time they finished their loading like we saw in the tweet.
+
+One way to avoid this experience is to hoist the data fetching to a common ancestor component and pass the data at once when all of the fetching is completed.
+
+Here, Dashboard is in charge for all of the components to audit the Spinners mess:
+
+```jsx
+function Dashboard() {
+  const { isLoading: isInvestmentSeekingLoading, data: investmentSeekingData } =
+    useQuery({
+      queryKey: ["InvestmentSeeking"],
+      queryFn: getInvestmentSeeking,
+    });
+
+  const {
+    isLoading: isInvestmentVerificationLoading,
+    data: investmentVerificationData,
+  } = useQuery({
+    queryKey: ["InvestmentVerification"],
+    queryFn: getInvestmentVerification,
+  });
+
+  // If *either* request is still pending, we'll show a spinner:
+  if (isInvestmentSeekingLoading || isInvestmentVerificationLoading) {
+    return <Spinner />;
+  }
+
+  return (
+    <>
+      <InvestmentSeekingBox data={investmentSeekingData} />
+      <InvestmentVerificationBox data={investmentVerificationData} />
+    </>
+  );
+}
+```
+
+But this solution doesn’t go well with component mentality because the actual component that need the data can not completely owned their data fetching logic. We'll lose that ergonomic of encapsulation here. Also as the data fetching requests increases, component would be bloated.
+
+So in the first case when every components for themselves, on plus side, we get a great DX but on minus side elements were not being gentle.
+
+Talk about second case, it's the opposite. We control the components of how they behave but components can not own their data requests.
+
+Suspense offers the best of both worlds, an ideal sweet spot with an addition of much more declarativeness - Now components can own their data requests and also we can control how they show up on initial load by wrapping them with Suspense Boundary, similar to “hoisting fetching up” strategy. Now the only thing is to decide which components are wrap around which Suspense Component and part of the same group so that layout shifting don’t happen. Some Careful thinking needs on this depending on the application.
+
+So Loading and Error state is attached with Suspense, outside of individual components because of the strict isolation of components make the whole space of UI a disaster. With Suspense we still retains the isolation as major thing the data request is still rests with the components but without that baffling experience.
+
+I hope I was able to convey my understanding about why suspense was originally created.
+
+Warm thanks to Josh Comeau, who taught me this eye-opening realization about Suspense original Vision. This is my reflection note of that **WHY**.

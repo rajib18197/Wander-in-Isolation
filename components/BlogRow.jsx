@@ -1,16 +1,18 @@
 import Link from "next/link";
 
 export default function BlogRow({ blog }) {
-  const { id, title, abstract, publishedOn } = blog;
+  const { slug, title, abstract, publishedOn } = blog;
 
   return (
     <div className="details">
       <div className="details__box">
         <div className="info">
-          <Link href={`/blogs/${id}`}>
+          <Link href={`/blogs/${slug}`}>
             <h1 className="heading-1">{title}</h1>
           </Link>
-          <p className="date">{new Date(publishedOn).toLocaleDateString()}</p>
+          <p className="date text-green-500 font-bold">
+            {new Date(publishedOn).toLocaleDateString()}
+          </p>
         </div>
         {/*  */}
         <div className="box">

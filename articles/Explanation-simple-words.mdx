@@ -1,7 +1,7 @@
 ---
 title: Explaination in Simple Words
 abstract: Closures, a core concept in JavaScript, can seem cryptic and challenging to grasp. This post delves into the world of JavaScript closures, unraveling their intricacies and shedding light on their power in managing scope and preserving data across function executions.
-publishedOn: "2023-09-02T12:00:00-0400"
+publishedOn: "2024-03-10T12:00:00-0400"
 ---
 
 <NotesBox title="Bundle">
@@ -229,18 +229,15 @@ publishedOn: "2023-09-02T12:00:00-0400"
   }
 </NotesBox>
 
-<div className="notes">
-	<div className="notes__title">
-	<span>String to Node</span>
-	</div>
+<NotesBox title={"String to Node"}>
 
-    <p className="notes__description">We can transform HTML Markup string to Real DOM Node object from JavaScript by a nice DOM API called "createContextualFragment()" method.</p>
-    <p className="notes__description">The return DOM Node can access all the DOM API methods like "querySelector()", "cloneNode()", "appendChild()" etc. This is helpful when we want to update the DOM elements only in places where it's actually change, when we don't want to do that by manually select elements. </p>
+    {<><p className="notes__description">We can transform HTML Markup string to Real DOM Node object from JavaScript by a nice DOM API called "createContextualFragment()" method.</p>
+    <p className="notes__description">The return DOM Node can access all the DOM API methods like "querySelector()", "cloneNode()", "appendChild()" etc. This is helpful when we want to update the DOM elements only in places where it's actually change, when we don't want to do that by manually select elements. </p></>}
 
-```
-const markup = <h1>Transform String of HTML to real DOM Node object</h1>
-const newDom = document.createRange().createContextualFragment(markup)
-const headingElement = newDom.querySelector('h1');
+```js
+const markup = <h1>Transform String of HTML to real DOM Node object</h1>;
+const newDom = document.createRange().createContextualFragment(markup);
+const headingElement = newDom.querySelector("h1");
 ```
 
-</div>
+</NotesBox>

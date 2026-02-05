@@ -1,15 +1,14 @@
-import getBlogsData from "@/lib/blogs";
+import { getBlogPostList } from "../helpers/file-helpers";
 import BlogRow from "./BlogRow";
-import Link from "next/link";
-
 // https://media.licdn.com/dms/image/D4E22AQHx50SHtAqgQA/feedshare-shrink_1280/0/1710265722936?e=1713398400&v=beta&t=1jMqOAR-FQhkbixGPN7wtGxcyNO9y8zj9RAAB8gNQUc
 
-export default function BlogsList() {
-  const blogs = getBlogsData();
+export default async function BlogsList() {
+  const blogPosts = await getBlogPostList();
+
   return (
-    <div className="flex flex-col gap-28">
-      {blogs.map((blog) => (
-        <BlogRow key={blog.id} blog={blog} />
+    <div className="blog-list">
+      {blogPosts.map((blog) => (
+        <BlogRow key={blog.slug} blog={blog} />
       ))}
     </div>
   );
