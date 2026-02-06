@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} aria-label="Wander in Isolation">
           <span className={styles.logoText}>
             <span className={styles.codeText}>Wander</span>
             <span className={styles.island}>in</span>

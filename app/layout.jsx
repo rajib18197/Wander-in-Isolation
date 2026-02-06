@@ -49,6 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" style={LIGHT_TOKENS}>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           rel="alternate"
           type="application/rss+xml"

@@ -26,7 +26,6 @@
 .logoText {
   display: flex;
   align-items: center;
-  /* justify-content: stretch; */
   gap: 0.5rem;
   font-size: 1.75rem;
   font-weight: 700;
@@ -48,7 +47,6 @@
 }
 
 .wordsText {
-  /* background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); */
   background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
   -webkit-background-clip: text;
   -webkit-background-clip: text;
@@ -70,9 +68,10 @@
   padding: 0.625rem 1.25rem;
   border-radius: 50px;
   color: #ffffff;
+  color: var(--color-primary-300);
+  font-weight: 700;
   text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
 }
