@@ -2,7 +2,6 @@
 import React from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { Play, Pause, RotateCcw } from "react-feather";
 
 import Card from "@/app/components/Card";
 import VisuallyHidden from "@/app/components/VisuallyHidden";

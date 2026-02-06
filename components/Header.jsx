@@ -1,6 +1,5 @@
 import { LineChart, RssIcon } from "lucide-react";
 import Link from "next/link";
-import { User } from "react-feather";
 import styles from "./Header.module.css";
 
 export default function Header() {

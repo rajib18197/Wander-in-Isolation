@@ -15,8 +15,8 @@ import {
   Zap,
   InfoIcon,
   ArrowBigRight,
+  CheckCircle,
 } from "lucide-react";
-import { ArrowRightCircle, CheckCircle } from "react-feather";
 import styles from "./about.module.css";
 
 export default function InteractiveResume() {
