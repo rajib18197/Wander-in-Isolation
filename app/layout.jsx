@@ -5,11 +5,11 @@ import Header from "../components/Header";
 
 import { BLOG_TITLE, LIGHT_TOKENS, SITE_URL } from "../constants";
 
-export const workSans = Work_Sans({
+const workSans = Work_Sans({
   subsets: ["latin"],
   variable: "--font-work-sans",
 });
-export const libre = Cormorant_Garamond({
+const libre = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-cormorant-garamond",
