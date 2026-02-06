@@ -2,8 +2,6 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  /* width: 1200px; */
-  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.2rem 0;
@@ -20,19 +18,15 @@
   align-items: center;
 }
 
-/* Logo Styles */
 .logo {
   text-decoration: none;
   transition: transform 0.3s ease;
 }
 
-.logo:hover {
-  transform: translateY(-2px);
-}
-
 .logoText {
   display: flex;
   align-items: center;
+  /* justify-content: stretch; */
   gap: 0.5rem;
   font-size: 1.75rem;
   font-weight: 700;
@@ -40,39 +34,29 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.island {
+  font-size: 1.3rem;
+  letter-spacing: -0.25px;
+}
+
 .codeText {
   background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.5px;
-}
-
-.island {
-  font-size: 2rem;
-  /* animation: float 3s ease-in-out infinite; */
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(5deg);
-  }
+  letter-spacing: -0.25px;
 }
 
 .wordsText {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  /* background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); */
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.25px;
 }
 
-/* Navigation Styles */
 .nav {
   display: flex;
   gap: 1.5rem;
@@ -84,8 +68,6 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  /* background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2); */
   border-radius: 50px;
   color: #ffffff;
   text-decoration: none;
@@ -107,7 +89,6 @@
   transform: scale(1.1);
 }
 
-/* Author Styles */
 .author {
   text-align: right;
   margin-top: 1rem;

@@ -1,146 +1,8 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Code,
-  Database,
-  Sparkles,
-  BookOpen,
-  Github,
-  ExternalLink,
-  Sun,
-  Moon,
-  Coffee,
-  Boxes,
-  Terminal,
-  Zap,
-  InfoIcon,
-  ArrowBigRight,
-  CheckCircle,
-} from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import styles from "./about.module.css";
 
-export default function InteractiveResume() {
-  const [darkMode, setDarkMode] = useState(true);
-  const [hoveredTech, setHoveredTech] = useState(null);
-  const [coffeeCount, setCoffeeCount] = useState(0);
-  const [particlePos, setParticlePos] = useState([]);
-  const [codeLines, setCodeLines] = useState(0);
-  const canvasRef = useRef(null);
-
-  // Particle animation on coffee click
-  const createParticles = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-
-    const newParticles = Array.from({ length: 12 }, (_, i) => ({
-      id: Date.now() + i,
-      x,
-      y,
-      angle: (i * 360) / 12,
-      color: ["#60a5fa", "#a78bfa", "#f472b6", "#fbbf24"][
-        Math.floor(Math.random() * 4)
-      ],
-    }));
-
-    setParticlePos((prev) => [...prev, ...newParticles]);
-
-    setTimeout(() => {
-      setParticlePos((prev) =>
-        prev.filter((p) => !newParticles.find((np) => np.id === p.id))
-      );
-    }, 1000);
-  };
-
-  // Animated code counter
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCodeLines((prev) => {
-        const target = 47382;
-        if (prev < target) {
-          return Math.min(prev + 234, target);
-        }
-        return target;
-      });
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Canvas wave animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = 200;
-
-    let frame = 0;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height / 2);
-
-      for (let x = 0; x < canvas.width; x++) {
-        const y =
-          canvas.height / 2 +
-          Math.sin((x + frame) * 0.02) * 30 +
-          Math.sin((x + frame) * 0.03) * 20;
-        ctx.lineTo(x, y);
-      }
-
-      ctx.strokeStyle = darkMode
-        ? "rgba(96, 165, 250, 0.3)"
-        : "rgba(59, 130, 246, 0.3)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      frame += 2;
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-  }, [darkMode]);
-
-  const techStack = [
-    {
-      name: "JavaScript / TypeScript",
-      emoji: "🔷",
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      name: "React, Next.js",
-      emoji: "⚛️",
-      color: "from-cyan-500 to-cyan-600",
-    },
-    {
-      name: "PostgreSQL, MongoDB, Redis",
-      emoji: "🐘",
-      color: "from-indigo-500 to-indigo-600",
-    },
-    {
-      name: "Node.js, Express JS",
-      emoji: "🟢",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      name: "CSS, Styled Components, Tailwind",
-      emoji: "🎨",
-      color: "from-pink-500 to-pink-600",
-    },
-    {
-      name: "Framer Motion, SVG animation",
-      emoji: "🌊",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      name: "React Query, Redux",
-      emoji: "🔄",
-      color: "from-red-500 to-red-600",
-    },
-  ];
-
+export default function About() {
+  const darkMode = true;
   const bgClass = darkMode ? styles.bgDark : styles.bgLight;
   const textClass = darkMode ? styles.textDark : styles.textLight;
   const mutedClass = darkMode ? styles.mutedDark : styles.mutedLight;
@@ -150,11 +12,6 @@ export default function InteractiveResume() {
     <div className={`${styles.container} ${bgClass} ${textClass}`}>
       {/* Header */}
       <section className={styles.aboutSection}>
-        {/* <div className={styles.aboutHeader}>
-          <h2 className={styles.aboutTitle}>About Me</h2>
-          <div className={styles.titleUnderline}></div>
-        </div> */}
-
         <div className={styles.aboutContent}>
           <div className={styles.greeting}>
             <p className={styles.greetingText}>
@@ -462,11 +319,6 @@ export default function InteractiveResume() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      {/* <footer className={`${styles.footer} ${mutedClass}`}>
-        <p>Built with React, Tailwind, and a lot of ☕</p>
-      </footer> */}
     </div>
   );
 }

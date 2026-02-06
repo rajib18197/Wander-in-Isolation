@@ -1,27 +1,14 @@
 import React from "react";
-import { MDXRemote } from "next-mdx-remote/rsc";
-
-import { BLOG_TITLE } from "../../../constants";
-import { loadBlogPost } from "../../../helpers/file-helpers";
-import COMPONENT_MAP from "../../../helpers/mdx-components";
-
-import BlogHero from "../../../components/BlogHero";
-
-import styles from "./BlogSlug.module.css";
-import ShareButtons from "../../../components/ShareButtons";
-
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-
-function readFile(localPath) {
-  return fs.readFile(path.join(process.cwd(), localPath), "utf8");
-}
-
-function readDirectory(localPath) {
-  console.log(localPath, 87);
-  return fs.readdir(path.join(process.cwd(), localPath));
-}
+import { MDXRemote } from "next-mdx-remote/rsc";
+import styles from "./BlogSlug.module.css";
+import { BLOG_TITLE, SITE_URL } from "../../../constants";
+import { loadBlogPost } from "../../../helpers/file-helpers";
+import COMPONENT_MAP from "../../../helpers/mdx-components";
+import BlogHero from "../../../components/BlogHero";
+import ShareButtons from "../../../components/ShareButtons";
 
 export async function generateMetadata({ params }) {
   const { blogId } = await params;
@@ -30,17 +17,15 @@ export async function generateMetadata({ params }) {
   const fileContents = fs.readFileSync(articlePath, "utf8");
   const { data } = matter(fileContents);
 
-  const siteUrl = "http://localhost:3000/";
-  const articleUrl = `${siteUrl}/articles/${blogId}`;
+  const articleUrl = `${SITE_URL}/blogs/${blogId}`;
 
   return {
-    title: data.title,
+    title: `${data.title} — Wander in Isolation`,
     description: data.description || data.excerpt || "",
     authors: [{ name: "Rajib Das" }],
 
-    // Open Graph
     openGraph: {
-      title: data.title,
+      title: `${data.title} — Wander in Isolation`,
       description: data.description || data.excerpt || "",
       url: articleUrl,
       siteName: BLOG_TITLE,
@@ -50,21 +35,20 @@ export async function generateMetadata({ params }) {
       authors: ["Rajib Das"],
       images: [
         {
-          url: data.coverImage || `${siteUrl}/og-default.png`, // Use article cover or default
+          url: data.coverImage || `${SITE_URL}/og-default.png`,
           width: 1200,
           height: 630,
-          alt: data.title,
+          alt: `${data.title} — Wander in Isolation`,
         },
       ],
     },
 
-    // Twitter Card
     twitter: {
       card: "summary_large_image",
-      title: data.title,
+      title: `${data.title} — Wander in Isolation`,
       description: data.description || data.excerpt || "",
-      creator: "@rajuzest", // Replace with your Twitter handle
-      images: [data.coverImage || `${siteUrl}/og-default.png`],
+      creator: "@rajuzest",
+      images: [data.coverImage || `${SITE_URL}/og-default.png`],
     },
   };
 }
@@ -86,7 +70,7 @@ async function BlogPost({ params }) {
 
       <ShareButtons
         title={frontmatter.title}
-        url={`http://localhost:3000/blogs/${blogId}`}
+        url={`${SITE_URL}/blogs/${blogId}`}
       />
     </article>
   );
