@@ -2,6 +2,7 @@
 import React from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { PauseIcon as Pause, PlayIcon as Play } from "lucide-react";
 
 import Card from "@/app/components/Card";
 import VisuallyHidden from "@/app/components/VisuallyHidden";
@@ -94,7 +95,7 @@ function CircularColorsDemo() {
               setTimeElapsed(0);
             }}
           >
-            <RotateCcw />
+            {/* <RotateCcw /> */}
             <VisuallyHidden>Reset</VisuallyHidden>
           </button>
         </div>
