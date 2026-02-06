@@ -20,12 +20,30 @@
 
 .content h1 {
   margin-bottom: 0.5rem;
+  font-size: 1.7rem;
+  text-transform: uppercase;
+  color: rgb(247, 6, 114);
+  color: rgb(51, 25, 66);
+  gap: 4px;
+  /* background-color: rgb(250, 197, 221); */
+  background-color: rgb(255, 255, 255);
+  padding: 0.8rem;
+  border-radius: 3px;
+  font-weight: 600;
 }
+/* .content h1::after,
+.content h1::before {
+  content: "";
+  width: 60%;
+  height: 3px;
+  background-color: var(--line-color);
+} */
 .content p {
   font-size: 1.125rem;
   color: var(--color-decorative-900);
   margin-bottom: 0px;
   font-weight: 400;
+  text-align: right;
 }
 .content time {
   font-weight: 500;

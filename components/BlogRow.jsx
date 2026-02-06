@@ -1,7 +1,10 @@
+import { format } from "date-fns";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function BlogRow({ blog }) {
   const { slug, title, abstract, publishedOn } = blog;
+  const humanizedDate = format(new Date(publishedOn), "MMMM do, yyyy");
 
   return (
     <div className="details">
@@ -11,25 +14,28 @@ export default function BlogRow({ blog }) {
             <h1 className="heading-1">{title}</h1>
           </Link>
           <p className="date text-green-500 font-bold">
-            {new Date(publishedOn).toLocaleDateString()}
+            <time dateTime={publishedOn}>{humanizedDate}</time>
           </p>
         </div>
-        {/*  */}
+
         <div className="box">
-          <div className="overview">{abstract}</div>
-        </div>
-        {/*  */}
-        <div className="description">
-          <div className="description-box">
-            <h1 className="heading">Why React Re-renders Components</h1>
-          </div>
-
-          <div className="description-box">
-            <h1 className="heading">Why React Re-renders Components</h1>
-          </div>
-
-          <div className="description-box">
-            <h1 className="heading">Why React Re-renders Components</h1>
+          <div className="overview">
+            {abstract}
+            {"   "}
+            <Link
+              href={`/blogs/${slug}`}
+              style={{
+                display: "inline-flex",
+                gap: ".3rem",
+                alignItems: "center",
+                color: "var(--color-primary-300)",
+                textDecoration: "underline",
+                textDecorationThickness: "2px",
+                textUnderlineOffset: ".225em",
+              }}
+            >
+              Continue Reading
+            </Link>
           </div>
         </div>
       </div>

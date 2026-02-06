@@ -1,11 +1,7 @@
 import BlogsList from "../components/BlogsList";
 
 export default function Home() {
-  return (
-    <main className="main">
-      <BlogsList />
-    </main>
-  );
+  return <BlogsList />;
 }
 
 // // <!-- Every Problem is An Opportunity to Show Which Super Hero You Are  -->

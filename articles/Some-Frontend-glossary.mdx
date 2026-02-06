@@ -1,0 +1,107 @@
+---
+title: Some Frontend Glossary and their brief explanation
+date: "2024-03-10"
+abstract: RTK Query, Bundle, Code Splitting, Wasted Renders, Diffing, Component Expectations, Criterias For Creating Components, Server Component, String to Node Conversion.
+publishedOn: "2024-03-10T12:00:00-0400"
+---
+
+### RTK Query
+
+"RTK Query", an addon on top of the redux toolkit reduces the complicated work related to remote state domain and is absolutely a game changer. As we can do a lot of things with Redux and also brings lot more predictability in applications 🔥.
+
+In simpler definition, RTK Query simplifying the process of data fetching, caching, storing, updating and retrieving logic by including some easy to follow APIs that takes those work away from us so that we can centre our mind by defining data source endpoints, data re-validation moments with lot less code, without bothering about reducers while also making the UX a lot more elegant.
+
+We don’t have to deal with all that headache of managing cache data, rather these types of implementations are hidden behind some abstractions (exposed APIs). Some of the extremely useful features are:
+
+- Automatic data loading and error state
+- So much easier to update data on the server and re-run the queries that is affected by server mutation with tag types to keep the cached data in sync with the server.
+- Avoid duplicate requests
+
+Yes there are more specialized tools available in the market e.g. React Query, SWR etc. which are probably better than RTKQ but they are highly specialized in managing only async states. In case of redux it does solve a lot of different use cases like:
+
+1. Complex Client state management
+2. Server state caching management
+
+I do love React Query but when a situation demands to manage all those different use cases at the same time then RTK query really shines.
+
+### Bundle
+
+To Place Simply, **aggregation of Our entire application code + the react
+library's code + 3rd party libraries code that we might includes to build our
+app condense into one huge JavaScript file makes up a bundle**. High
+possibility that this bundle becomes quite heavy in size for medium or larger
+size applications that users need to download into their browser to start
+their work. But download the bundle once makes the application feels like a
+native desktop or phone application which we call single page application.
+
+### Code Splitting
+
+To Make a better user experince, we can divide the bundle into multiple
+parts and download them when needed. This would lead to the faster
+initial load times as users don't have to download that one huge bundle. For example If an app has 5 pages, then downloading them at once burden
+the pressure into users computer and what else - user might not visit
+the all 6 pages in this situation. So to prevent that we could split
+each pages and download them individually when user need them. So now
+the bundle has divided into 5 parts. This is called code splitting.
+
+### Wasted Renders
+
+In react, a parent component re-render causes all of it's child components (If any) to re-render as well even when the props remains unchanged. In "the react territory" they assume that components we write in terms of rendering process are always pure.
+
+Since that's not always possible as we can make components impure by JavaScript built in natives such as Date() Object and by other things if the need arises and react also gave us some escape hatches (e.g. useRef(), useEffect() etc.) to execute "on the side" works apart from a component's main work. So to avoid stale data in the UI, React plays it safe and re-render all the children.
+
+In Certain situations some re-renders cause visible lag in the UI as the component does some heavy lifting work during the process of rendering.Outlining the situation be like- React invokes your component function, calculates expensive operations, does all the diffing related stuff and only to see in the end nothing has changed. All of the operations, yes needless operations. In technical terms this is called wasted render.
+
+So to prevent that, One solution could be to wrap the component with memo() which make sure component only re-render when props changed or the context it subscribed to changed or its own state has changed. That would be a nice solution to prevent that visible lag.
+
+### Diffing
+
+In React, Diffing Algorithm compares React Elements step-by-step between two renders based on their position in the Element tree.
+
+During the diffing process if react found an Element/Component which is the same type and in the same position between two renders in the Element tree then that component instance is not removed from the DOM and states will also not be updated except the props it received are only going to be updated.
+
+This creates an unintended and weird behavior. To fix this, we can use Key props to tell react that those two Elements/Components are different and thus the state will be reset
+
+### Components Expectations
+
+React components means "only calculate". React expects you to write all the code inside the component's top level that only does calculations (main work), Not doing other work.
+
+That's why react exposes useEffect, useRef kind of stuff, so that we can express other side of work in there. Basically we immerse the top level only with logic, pure logic. Yes, we are more focused on programming. We are not concerned about how that logic that we wrote ended up on the document.
+
+### Criterias For Creating Components
+
+One of the main principles of react is to create applications by assembling components. Components blend in with data, JavaScript logic and appearance into one place.
+
+It hides all the complexity from the consumer. Basically components create abstraction.
+
+Some of the different criteria that indicate to create a new component :
+
+- content mixed with different things that don't logically belong together
+- separate responsibilities
+- different feature area
+- looks complex and hard to understand
+- need for reusability
+- depend on many props
+- accumulate multiple states or effects or both
+
+### Server Component
+
+In SSR, components run on the server and on the client also but in this case this is unnecessary as there is no interactiveness associated with those components. React SSR fixed this issue by omitting these components code from sending and running in the browser and reducing the bundle size.
+
+With Server Component: API Calls / file reading / db calls → generate HTML → download JS (only client components, excluded generated HTML (Thanks to server components)) → hydration
+
+Without Server Component: API Calls / file reading / db calls → generate HTML → download JS (all components including generated HTML JS code also) → hydration
+
+Another thing: In SSR, db or API calls happens outside components and then injected into the components in the server but db or API calls happens inside components in Server component.
+
+### String to Node
+
+We can transform HTML Markup string to Real DOM Node object from JavaScript by a nice DOM API called "createContextualFragment()" method.
+
+The return DOM Node can access all the DOM API methods like "querySelector()", "cloneNode()", "appendChild()" etc. This is helpful when we want to update the DOM elements only in places where it's actually change, when we don't want to do that by manually select elements.
+
+```js
+const markup = <h1>Transform String of HTML to real DOM Node object</h1>;
+const newDom = document.createRange().createContextualFragment(markup);
+const headingElement = newDom.querySelector("h1");
+```

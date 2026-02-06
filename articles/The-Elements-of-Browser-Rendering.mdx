@@ -1,14 +1,17 @@
 ---
 title: The Elements of Browsers Rendering
+date: "2026-01-10"
 abstract: If we want to have a strong hold on the rendering performance metrics of browsers and on improving bottlenecks, I feel we’d better keep on detouring on this route to better off ourselves with the right combination of knowledge, experience, and tooling.
 publishedOn: "2026-01-10T12:00:00-0400"
 ---
 
-What the web browsers do when a user requests a page is quite a remarkable journey. My goodness, the process behind the curtains reflects such a diligent effort by the folks who work on browsers. So far, I find it very interesting to navigate through the steps that are taken to draw pixels on the screen. I’ll admit it, this is a surprisingly deep and interesting area. As developers, we sustained the focus quite a bit on performance, especially when building things on scale.
+What web browsers do when a user requests a page is quite a remarkable journey. My goodness, the process behind the curtains reflects such a diligent effort by the folks who work on browsers. So far, I find it very interesting to navigate through the steps that are taken to draw pixels on the screen. I’ll admit it, this is a surprisingly deep and interesting area. As developers, we sustained the focus quite a bit on performance, especially when building things on scale.
 
 If we want to have a strong hold on the rendering performance metrics of browsers and on improving bottlenecks, I feel we’d better keep on detouring on this route to better off ourselves with the right combination of knowledge, experience, and tooling. Otherwise, taking a long time to load a fully interactive page as well as responding to user interactions can ruin a good user experience. After all, the only thing that matters, and we’ll ever need in software, is the good user experience.
 
 So what I want to do today is put down some of the insights I’ve learned by writing code, reading articles and watching various conference talks about the absolutely critical, need-to-know bits of page rendering procedures in the web-space. Let’s put in the work.
+
+## DNS Lookup, TCP Handshake and HTTP Protocol
 
 It all starts with hitting a request in the address bar. That submission will initiate a DNS lookup if the website is requested for the first time, as some caching might appear to speed things up. DNS lookup returns an actual IP address, which is the location of the server where the requested file is stored. The browser has the IP now. It now establishes a connection to that IP so that they can communicate effectively, which is known as TCP Handshake. But effective isn’t the only goal. It needs to be secured in that no 3rd party entity can read the data that is being exchanged by them. To ensure that another handshake is done, called TLS Negotiation.
 
@@ -18,9 +21,13 @@ I like the analogy that I found in the MDN docs. It states like this: If we imag
 
 Then the internet connection is basically like the street between our house and the shop. DNS is like looking up the address of the shop before we visit it. TCP is like a car or a bike (or however else we might travel along the road), and HTTP is like the language we use to order our goods.
 
+## Critical Rendering Pipelines
+
 Once the handshake and connection are done, the browser starts to assemble them into something meaningful that the user wants to see.
 
 To achieve that, it has a couple of pipelines to go through to convert the bytes to visual pixels on the screen.
+
+### Building DOM & CSSOM Tree and Preload resources
 
 As soon as the browser gets the first chunk of raw bytes, it needs to build a structure they can work with. And for that, it converts the raw bytes to tokens, which are like vocabularies of a language. From tokens, it generates nodes, which contain all the information necessary about a certain HTML element, and all the nodes are modeled into a tree data structure, which functions as a relationship model between things. This internal representation of the HTML file is known as the DOM tree. It can be manipulated by various DOM methods and properties in JavaScript.
 
@@ -58,11 +65,15 @@ CSS needs to be downloaded and parsed completely before JS can be parsed and exe
 
 But nowadays we have better alternatives. If we place the script in the head and don’t want to pause the HTML parsing, we can mark the defer attribute to the script tag, and that will fetch the script in the background and start execution after the HTML has been fully parsed.
 
+### Render Tree, Layouting and Painting
+
 Coming back to the pipelines, since the DOM and CSSOM are ready, the browser starts to traverse the DOM tree, and for each node, it makes sure it has all the information for that element, plus it calculates the computed values from the CSSOM tree, figures out which styles apply to which elements, and forms a render tree. This tree excludes invisible elements like the head tag and its descendants and CSS declaration with display: none.
 
 Now that the browser has the render tree in place nicely, it starts to traverse the render tree to calculate what dimensions each node should have and exactly where on the screen the node will sit based on couple of factors. Some of these are: device viewport size, CSS box model, CSS layout modes (flex layout mode, grid layout, positioned layout, flow layout etc.). This process is referred to as layout calculation, if this is running for the first time, but on subsequent reruns it’s called reflow.
 
 So far the browser has the render tree consisting of nodes and has done all the calculations of where they need to be painted. Coming to the actual drawing work, this is where the browser figures out which colors to assign to every visual element in the render tree (“rasterization”) and filling it in.
+
+### Compositing
 
 To ensure repainting can be done faster, drawing the page split up into distinct layers, sometimes depending on the styles we are using, so that it can re-paint only the part that needs to be changed, and after repainting, the browser then offloads layers to the compositing phase so that it can merge all the layers together into one final image. Similar to design mockups in Figma and others. With this method, the painting process can reuse the work it has done in the previous paint and only change what hadn’t been done previously.
 
@@ -90,7 +101,9 @@ Which steps will re-run in the pixel pipeline depends on CSS properties. If an e
 
 But elements that have been taken out of the normal flow (i.e., absolute), changing width or height don’t affect the other elements. So cases like this, layout calculation, repaint usually happen much faster.
 
-A quick plug: all the pipeline work that I mentioned (render tree construction, layout, painting, and compositing) is constrained with a tight time of ~16ms to make the UI motion feel fluid and believable. And the steps are blocking and sequential, as we’ve witnessed, done by one thread, which is the main thread. However main thread must also perform other tasks, such as responding to user input and executing JavaScript to keep the UI responsive also. And it is considered a bad and sluggish experience if a response to the user interactions and rendering steps both take greater than ~50ms.
+#### A quick plug
+
+all the pipeline work that I mentioned (render tree construction, layout, painting, and compositing) is constrained with a tight time of ~16ms to make the UI motion feel fluid and believable. And the steps are blocking and sequential, as we’ve witnessed, done by one thread, which is the main thread. However main thread must also perform other tasks, such as responding to user input and executing JavaScript to keep the UI responsive also. And it is considered a bad and sluggish experience if a response to the user interactions and rendering steps both take greater than ~50ms.
 
 To maintain optimal performance, it is also important to make sure JS execution doesn’t take that long.
 
@@ -98,10 +111,14 @@ Like I said earlier, this stuff is really deep. There are obviously many more nu
 
 Hopefully this writeup helped to add some light on your understanding and you are eager to learn more about it. Thank you so much for the ride.
 
-### Resources:
+## Resources:
 
 1. [https://medium.com/@addyosmani/how-modern-browsers-work-7e1cc7337fff](https://medium.com/@addyosmani/how-modern-browsers-work-7e1cc7337fff)
 
 2. [https://hacks.mozilla.org/2017/09/building-the-dom-faster-speculative-parsing-async-defer-and-preload/?utm_source=chatgpt.com](https://hacks.mozilla.org/2017/09/building-the-dom-faster-speculative-parsing-async-defer-and-preload/?utm_source=chatgpt.com)
 
 P.S. If you wish to see how many layers a webpage has then browser dev-tool has a "layer tab" in which we can visualize them.
+
+---
+
+_This article was also published on HackerNoon and featured in their **"Programming Tech Brief"** Newsletter and Podcast:_ [article link](https://hackernoon.com/how-browsers-turn-web-requests-into-pixels-on-your-screen) | [podcast link](https://share.transistor.fm/s/ef723a6c)

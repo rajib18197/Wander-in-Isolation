@@ -3,9 +3,13 @@ import path from "path";
 import matter from "gray-matter";
 import React from "react";
 
+const hasNotIncluded = ["React-limitations.mdx"];
+
 export async function getBlogPostList() {
   const fileNames = await readDirectory("/articles");
-  const files = fileNames.filter((file) => file.includes("."));
+  const files = fileNames
+    .filter((file) => file.includes("."))
+    .filter((file) => !hasNotIncluded.includes(file));
 
   const blogPosts = [];
 

@@ -15,8 +15,9 @@
   margin: 0 auto;
   padding: 64px var(--viewport-padding) 32px;
   background: var(--color-page-background);
+  background: #fff;
   color: #101d28;
-  box-shadow: var(--shadow-page);
+  box-shadow: var(--shadow-card);
 }
 
 .page > * {

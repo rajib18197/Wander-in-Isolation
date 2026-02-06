@@ -17,14 +17,19 @@
 
 body {
   color: #fff;
-  max-width: 1050px;
-  width: 100%;
-  margin: 0 auto;
   font-family: "Inter";
 }
 
 .blog-list {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 4rem;
+}
+
+.info p {
+  font-size: 1.125rem;
+  color: var(--color-decorative-100);
+  margin-bottom: 0px;
+  font-weight: 400;
+  text-align: right;
 }

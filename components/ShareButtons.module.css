@@ -1,0 +1,113 @@
+/* components/ShareButtons.module.css */
+
+.shareButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  margin: 40px 0 20px;
+  /* border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb; */
+  justify-content: flex-end;
+}
+
+.shareLabel {
+  font-size: 15px;
+  color: #6b7280;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.shareButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #f3f4f6;
+  color: #374151;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shareButton:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.shareButton:active {
+  transform: translateY(0);
+}
+
+/* Individual button colors (optional) */
+.shareButton:nth-child(2):hover {
+  /* Twitter */
+  background-color: #1da1f2;
+  color: white;
+}
+
+.shareButton:nth-child(3):hover {
+  /* LinkedIn */
+  background-color: #0077b5;
+  color: white;
+}
+
+.shareButton:nth-child(4):hover {
+  /* Facebook */
+  background-color: #1877f2;
+  color: white;
+}
+
+.shareButton:nth-child(5):hover {
+  /* Hacker News */
+  background-color: #ff6600;
+  color: white;
+}
+
+.shareButton:nth-child(6):hover {
+  /* Copy link */
+  background-color: #10b981;
+  color: white;
+}
+
+.copiedMessage {
+  font-size: 13px;
+  color: #10b981;
+  font-weight: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .shareButtons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .shareLabel {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .shareButton {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
