@@ -51,7 +51,7 @@ export default function About() {
 
           <div className={styles.learningPath}>
             <h3 className={styles.sectionTitle}>
-              Topics I'm aiming to educate myself:
+              These are the areas I'm educating myself on —
             </h3>
             <div className={styles.topicsGrid}>
               <div className={styles.topicCard}>
@@ -86,8 +86,7 @@ export default function About() {
 
           <div className={styles.techStack}>
             <h3 className={styles.sectionTitle}>
-              Commitment of the above deepening my relationships with these
-              languages:
+              Commitment of the above deepening my relationships with these —
             </h3>
             <div className={styles.stackCategories}>
               <div className={styles.stackCategory}>
@@ -127,7 +126,7 @@ export default function About() {
 
           <div className={styles.links}>
             <h3 className={styles.sectionTitle}>
-              Other platforms where you can view my works:
+              Other platforms where you can view my works —
             </h3>
             <div className={styles.linkCards}>
               <a
