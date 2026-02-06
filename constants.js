@@ -1,5 +1,5 @@
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
-export const BLOG_TITLE = "Wander in Isolation";
+export const BLOG_TITLE = "Wander in isolation";
 export const COLOR_THEME_COOKIE_NAME = "color-theme";
 
 export const LIGHT_COLORS = {

@@ -1,18 +1,26 @@
-import { Inter } from "next/font/google";
+import { Work_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import "./styles.css";
 import Header from "../components/Header";
 
 import { BLOG_TITLE, LIGHT_TOKENS, SITE_URL } from "../constants";
 
-const inter = Inter({ subsets: ["latin"] });
+export const workSans = Work_Sans({
+  subsets: ["latin"],
+  variable: "--font-work-sans",
+});
+export const libre = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-cormorant-garamond",
+});
 
 // Compound Exercise
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Wander in Isolation — by Rajib Das",
+    default: "Wander in Isolation • A blog by Rajib Das",
     // template: "%s — Rajib Das",
   },
   description:
@@ -58,7 +66,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${inter.className} antialiased`}
+        className={`${workSans.variable} ${libre.variable} antialiased`}
         style={{
           backgroundColor: "oklch(12.9% 0.042 264.695)",
           color: "white",

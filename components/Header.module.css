@@ -3,6 +3,7 @@
   top: 0;
   z-index: 1000;
   backdrop-filter: blur(10px);
+  /* background-color: var(--color-decorative-100); */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.2rem 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -27,10 +28,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.75rem;
+  font-size: 1.78rem;
   font-weight: 700;
   color: #ffffff;
+  color: var(--color-secondary-500);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: "Cormorant Garamond", sans-serif;
+  text-transform: capitalize;
 }
 
 .island {
@@ -39,7 +43,8 @@
 }
 
 .codeText {
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  /* background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); */
+  background-color: var(--color-secondary-500);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -47,7 +52,9 @@
 }
 
 .wordsText {
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  background-color: var(--color-secondary-500);
+
+  /* background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); */
   -webkit-background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

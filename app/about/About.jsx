@@ -10,16 +10,18 @@ export default function About() {
 
   return (
     <div className={`${styles.container} ${bgClass} ${textClass}`}>
-      {/* Header */}
       <section className={styles.aboutSection}>
         <div className={styles.aboutContent}>
           <div className={styles.greeting}>
             <p className={styles.greetingText}>
               Hey there, Welcome! I'm glad you're here. My name is Rajib Das and
-              I'm a Software Engineer. I've been sharing educational lessons on
-              various software engineering concepts and tools as I learn them.
-              I'm absolutely positive you'll love the way I articulate them and
-              find them useful.
+              I'm a Software Engineer. I've been{" "}
+              <span className={styles.fancyUnderline}>
+                sharing educational lessons on various software engineering
+                concepts and tools
+              </span>{" "}
+              as I learn them. I'm absolutely positive you'll love the way I
+              articulate them and find them useful.
             </p>
           </div>
 
@@ -206,13 +208,12 @@ export default function About() {
         </div>
       </section>
 
-      {/* Main Content */}
       <main className={styles.main}>
         {/* Experience */}
         <section className={styles.section}>
           <div className={styles.aboutHeader}>
-            <h2 className={styles.aboutTitle}>Career So Far</h2>
-            <div className={styles.titleUnderline}></div>
+            <h2 className={styles.aboutTitle}>Work Experience</h2>
+            {/* <div className={styles.titleUnderline}></div> */}
           </div>
           <div className={`${styles.experienceCard} ${cardClass}`}>
             <div className={styles.experienceHeader}>
@@ -299,7 +300,7 @@ export default function About() {
         <section className={styles.section}>
           <div className={styles.aboutHeader}>
             <h2 className={styles.aboutTitle}>Academic Qualification</h2>
-            <div className={styles.titleUnderline}></div>
+            {/* <div className={styles.titleUnderline}></div> */}
           </div>
 
           <div className={`${styles.educationCard} ${cardClass}`}>

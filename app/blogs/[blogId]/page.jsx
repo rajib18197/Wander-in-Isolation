@@ -20,12 +20,12 @@ export async function generateMetadata({ params }) {
   const articleUrl = `${SITE_URL}/blogs/${blogId}`;
 
   return {
-    title: `${data.title} — Wander in Isolation`,
+    title: `${data.title} • Wander in Isolation`,
     description: data.description || data.excerpt || "",
     authors: [{ name: "Rajib Das" }],
 
     openGraph: {
-      title: `${data.title} — Wander in Isolation`,
+      title: `${data.title} • Wander in Isolation`,
       description: data.description || data.excerpt || "",
       url: articleUrl,
       siteName: BLOG_TITLE,
@@ -38,14 +38,14 @@ export async function generateMetadata({ params }) {
           url: data.coverImage || `${SITE_URL}/og-default.png`,
           width: 1200,
           height: 630,
-          alt: `${data.title} — Wander in Isolation`,
+          alt: `${data.title} • Wander in Isolation`,
         },
       ],
     },
 
     twitter: {
       card: "summary_large_image",
-      title: `${data.title} — Wander in Isolation`,
+      title: `${data.title} • Wander in Isolation`,
       description: data.description || data.excerpt || "",
       creator: "@rajuzest",
       images: [data.coverImage || `${SITE_URL}/og-default.png`],

@@ -10,7 +10,7 @@ export default function Header() {
           <span className={styles.logoText}>
             <span className={styles.codeText}>Wander</span>
             <span className={styles.island}>in</span>
-            <span className={styles.wordsText}>Isolation</span>
+            <span className={styles.wordsText}>isolation</span>
           </span>
         </Link>
 
