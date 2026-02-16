@@ -309,7 +309,7 @@ export default function About() {
                   Bangladesh University of Business and Technology
                 </h3>
                 <p className={styles.degree}>
-                  BSc in Computer Science and Engineering (2019 — 2023)
+                  BSc in Computer Science and Engineering (Graduation year: 2024)
                 </p>
               </div>
               <div className={`${styles.educationMeta} ${mutedClass}`}>
