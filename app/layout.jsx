@@ -2,6 +2,7 @@ import { Work_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import "./styles.css";
 import Header from "../components/Header";
+import { Analytics } from "@vercel/analytics/next";
 
 import { BLOG_TITLE, LIGHT_TOKENS, SITE_URL } from "../constants";
 
@@ -74,6 +75,7 @@ export default function RootLayout({ children }) {
       >
         <Header />
         <main>{children}</main>
+        <Analytics />
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ import { loadBlogPost } from "../../../helpers/file-helpers";
 import COMPONENT_MAP from "../../../helpers/mdx-components";
 import BlogHero from "../../../components/BlogHero";
 import ShareButtons from "../../../components/ShareButtons";
+import TableOfContents from '../../../components/TableOfContents/TableOfContents'
 
 export async function generateMetadata({ params }) {
   const { blogId } = await params;
